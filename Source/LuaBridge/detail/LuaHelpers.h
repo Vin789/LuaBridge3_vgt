@@ -174,7 +174,9 @@ inline int lua_absindex(lua_State* L, int idx)
 }
 #endif
 
-inline int lua_rawgetp(lua_State* L, int idx, const void* p)
+// VGT BEGIN Fix lua_rawgetp function definition conflict with more recent version of Luau that define a macro lua_rawgetp (same name)
+inline int lua_rawgetp_vgt(lua_State* L, int idx, const void* p)
+// VGT END
 {
     idx = lua_absindex(L, idx);
     luaL_checkstack(L, 1, "not enough stack slots");

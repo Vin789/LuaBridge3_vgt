@@ -360,12 +360,12 @@ class Namespace : public detail::Registrar
                 lua_pop(L, 1); // Stack: ns, st
 
                 // Map T back from its stored tables
-                lua_rawgetp(L, LUA_REGISTRYINDEX, detail::getConstRegistryKey<T>()); // Stack: ns, st, co
+                lua_rawgetp_vgt(L, LUA_REGISTRYINDEX, detail::getConstRegistryKey<T>()); // Stack: ns, st, co
                 LUABRIDGE_ASSERT(lua_istable(L, -1)); // Class was previously registered as table or namespace ?
                 lua_insert(L, -2); // Stack: ns, co, st
                 ++m_stackSize;
 
-                lua_rawgetp(L, LUA_REGISTRYINDEX, detail::getClassRegistryKey<T>()); // Stack: ns, co, st, cl
+                lua_rawgetp_vgt(L, LUA_REGISTRYINDEX, detail::getClassRegistryKey<T>()); // Stack: ns, co, st, cl
                 LUABRIDGE_ASSERT(lua_istable(L, -1)); // Class was previously registered as table or namespace ?
                 lua_insert(L, -2); // Stack: ns, co, cl, st
                 ++m_stackSize;
@@ -412,7 +412,7 @@ class Namespace : public detail::Registrar
             lua_pushvalue(L, -1); // Stack: ns, co, cl, st, st
             lua_rawsetp(L, -3, detail::getStaticKey()); // co [staticKey] = st. Stack: ns, co, cl, st
 
-            lua_rawgetp(L, LUA_REGISTRYINDEX, staticKey); // Stack: ns, co, cl, st, parent st (pst) | nil
+            lua_rawgetp_vgt(L, LUA_REGISTRYINDEX, staticKey); // Stack: ns, co, cl, st, parent st (pst) | nil
             if (lua_isnil(L, -1)) // Stack: ns, co, cl, st, nil
             {
                 lua_pop(L, 1);
@@ -423,10 +423,10 @@ class Namespace : public detail::Registrar
 
             LUABRIDGE_ASSERT(lua_istable(L, -1)); // Stack: ns, co, cl, st, pst
 
-            lua_rawgetp(L, -1, detail::getClassKey()); // Stack: ns, co, cl, st, pst, parent cl (pcl)
+            lua_rawgetp_vgt(L, -1, detail::getClassKey()); // Stack: ns, co, cl, st, pst, parent cl (pcl)
             LUABRIDGE_ASSERT(lua_istable(L, -1));
 
-            lua_rawgetp(L, -1, detail::getConstKey()); // Stack: ns, co, cl, st, pst, pcl, parent co (pco)
+            lua_rawgetp_vgt(L, -1, detail::getConstKey()); // Stack: ns, co, cl, st, pst, pcl, parent co (pco)
             LUABRIDGE_ASSERT(lua_istable(L, -1));
 
             lua_rawsetp(L, -6, detail::getParentKey()); // co [parentKey] = pco. Stack: ns, co, cl, st, pst, pcl
@@ -1540,7 +1540,7 @@ private:
     {
         if (m_stackSize == 1 && lua_istable(L, -1))
         {
-            lua_rawgetp(L, -1, detail::getPropgetKey());
+            lua_rawgetp_vgt(L, -1, detail::getPropgetKey());
             const bool propertyGetterTableIsValid = lua_istable(L, -1);
             lua_pop(L, 1);
 
