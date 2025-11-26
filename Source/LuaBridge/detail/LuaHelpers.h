@@ -572,6 +572,13 @@ inline int raise_lua_error(lua_State* L, const char* fmt, ...)
     return lua_error_x(L);
 }
 
+// VGT BEGIN Fix ignore unreachable code warning
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4702) // Disable 4702 (unreachable code)
+#endif // _MSC_VER
+// VGT END
+
 /**
  * @brief Checks if the value on the stack is a number type and can fit into the corresponding c++ integral type..
  */
@@ -605,6 +612,12 @@ constexpr bool is_integral_representable_by(T value)
     return value >= static_cast<T>((std::numeric_limits<U>::min)())
         && value <= static_cast<T>((std::numeric_limits<U>::max)());
 }
+
+// VGT BEGIN Fix ignore unreachable code warning
+#if defined(_MSC_VER)
+#pragma warning(pop) // Disable 4702 (unreachable code)
+#endif // _MSC_VER
+// VGT END
 
 template <class U = lua_Integer>
 bool is_integral_representable_by(lua_State* L, int index)
