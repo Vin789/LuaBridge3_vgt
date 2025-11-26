@@ -185,7 +185,9 @@ inline int lua_rawgetp_vgt(lua_State* L, int idx, const void* p)
     return lua_type(L, -1);
 }
 
-inline void lua_rawsetp(lua_State* L, int idx, const void* p)
+// VGT BEGIN Fix lua_rawsetp function definition conflict with more recent version of Luau that define a macro lua_rawsetp_vgt (same name)
+inline void lua_rawsetp_vgt(lua_State* L, int idx, const void* p)
+// VGT END
 {
     idx = lua_absindex(L, idx);
     luaL_checkstack(L, 1, "not enough stack slots");
