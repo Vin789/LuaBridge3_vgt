@@ -65,11 +65,24 @@ inline void lua_pushcclosure_x(lua_State* L, lua_CFunction fn, const char* debug
     lua_pushcclosure(L, fn, debugname, n);
 }
 
+// VGT BEGIN Fix ignore unreachable code warning
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4702) // Disable 4702 (unreachable code)
+#endif // _MSC_VER
+// VGT END
+
 inline int lua_error_x(lua_State* L)
 {
     lua_error(L);
     return 0;
 }
+
+// VGT BEGIN Fix ignore unreachable code warning
+#if defined(_MSC_VER)
+#pragma warning(pop) // Disable 4702 (unreachable code)
+#endif // _MSC_VER
+// VGT END
 
 inline int lua_getstack_x(lua_State* L, int level, lua_Debug* ar)
 {

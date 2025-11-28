@@ -484,6 +484,13 @@ inline std::optional<int> try_call_newindex_extensible(lua_State* L, const char*
     return 0;
 }
 
+// VGT BEGIN Fix ignore unreachable code warning
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4702) // Disable 4702 (unreachable code)
+#endif // _MSC_VER
+// VGT END
+
 template <bool IsObject>
 inline int newindex_metamethod(lua_State* L)
 {
@@ -555,6 +562,12 @@ inline int newindex_metamethod(lua_State* L)
 
     return 0;
 }
+
+// VGT BEGIN Fix ignore unreachable code warning
+#if defined(_MSC_VER)
+#pragma warning(pop) // Disable 4702 (unreachable code)
+#endif // _MSC_VER
+// VGT END
 
 //=================================================================================================
 /**
